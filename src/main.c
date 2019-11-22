@@ -28,13 +28,14 @@ int		main(int ac, char **av)
 			return (0);
 		}
 		buff[bytes] = '\0';
-		if (check(buff) == 1)
+	//	if (check(buff) == 1)
 			print(buff);
-		else
+			
+		/*else
 		{
 			ft_putendl("Found wrong line length. Exiting.");
 			return (0);
-		}
+		}*/
 	}
 	else
 		ft_putstr("usage :  ./fdf fileName.\n");

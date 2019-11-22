@@ -24,6 +24,8 @@ typedef struct 		s_win
     void *img_ptr;
     int x;
     int y;
+    int winx;
+    int winy;
     int zm;
     char *buff;
     int **table;
