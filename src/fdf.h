@@ -17,7 +17,31 @@
 # include <math.h>
 # include "../libft/libft.h"
 # define BUFF_SIZE 6000000
-
+typedef struct 		s_win
+{
+    void *mlx_ptr;
+    void *win_ptr;
+    void *img_ptr;
+    int x;
+    int y;
+    int zm;
+    char *buff;
+    int **table;
+    int pr;
+    int z;
+    int z0;
+    int z1;
+    int rx;
+    int mx;
+    int my;
+    int hi;
+    int wi;
+    char *liner;
+    int		li;
+	int		lo;
+    int jj;
+    int zmo;
+} 					t_win;
 typedef struct		s_map
 {
 	int		x;

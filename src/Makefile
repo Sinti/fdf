@@ -14,7 +14,7 @@ NAME = ../fdf
 
 FLAG = -Werror -Wextra -Wall
 
-SRC = main.c check_file.c
+SRC = main.c check_file.c Drawline.c
 
 
 OBJ = main.o check_file.o

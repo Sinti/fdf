@@ -1,28 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_file.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/09 11:51:39 by relkassm          #+#    #+#             */
-/*   Updated: 2019/11/15 16:53:45 by relkassm         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fdf.h"
 
-int		check(char *buff)
+int check(char *buff)
 {
-	t_map	xy;
-	char	**lines;
-	char	**line;
+	t_map xy;
+	char **lines;
+	char **line;
 
 	xy.i = 0;
 	while (buff[xy.i])
 	{
-		if (ft_isalnum(buff[xy.i]) == 0 && buff[xy.i] != ' '
-				&& buff[xy.i] != ',' && buff[xy.i] != '\n' && buff[xy.i] != '-')
+		if (ft_isalnum(buff[xy.i]) == 0 && buff[xy.i] != ' ' && buff[xy.i] != ',' && buff[xy.i] != '\n' && buff[xy.i] != '-')
 			return (0);
 		xy.i++;
 	}
@@ -41,11 +28,35 @@ int		check(char *buff)
 	}
 	return (1);
 }
-
-int		count_height(char *buff)
+static void iso(int *x, int *y, int z, t_win *w)
 {
-	int		i;
-	char	**lines;
+	int previous_x;
+	int previous_y;
+
+	previous_x = *x;
+	previous_y = *y;
+	*x = (previous_x - previous_y) * cos(-0.45) + w->x * w->jj;
+	*y = -(z*w->z) * w->zm + (previous_x + previous_y) * sin(0.45) + w->y * w->jj;
+}
+
+static void rotation(int *x, int *y, int *z, t_win *w)
+{
+	int previous_x;
+	int previous_y;
+	int previous_z;
+
+	previous_x = *x;
+	previous_y = *y;
+	previous_z = *z;
+	*x = previous_x;
+	*y = previous_y * cos(0.45) + previous_z * sin(0.45);
+	*z = -previous_y * sin(0.45) + previous_z * cos(0.45);
+}
+
+int count_height(char *buff)
+{
+	int i;
+	char **lines;
 
 	i = 0;
 	lines = ft_strsplit(buff, '\n');
@@ -54,11 +65,11 @@ int		count_height(char *buff)
 	return (i);
 }
 
-int		count_width(char *buff)
+int count_width(char *buff)
 {
-	int		i;
-	char	**lines;
-	char	**fstline;
+	int i;
+	char **lines;
+	char **fstline;
 
 	i = 0;
 	lines = ft_strsplit(buff, '\n');
@@ -68,12 +79,12 @@ int		count_width(char *buff)
 	return (i);
 }
 
-int		**store(char *buff)
+int **store(char *buff)
 {
-	char	**lines;
-	char	**line;
-	int		**table;
-	t_map	xy;
+	char **lines;
+	char **line;
+	int **table;
+	t_map xy;
 
 	xy.i = 0;
 	xy.x = count_width(buff);
@@ -94,16 +105,114 @@ int		**store(char *buff)
 	}
 	return (table);
 }
-
-void	print(char *buff)
+void line(int x0, int y0, int x1, int y1, t_win *w, int cl, int **table, int wi)
 {
-	int		**table;
-	void	*mlx_ptr;
-	void	*win_ptr;
+	
+	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+	int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+	int err = (dx > dy ? dx : -dy) / 2;
+	int e2;
+	if (w->pr < 0)
+	{
+		iso(&x0, &y0, table[(y0 - w->my) / wi][(x0 - w->mx) / wi], w);
+		iso(&x1, &y1, table[(y1 - w->my) / wi][(x1 - w->mx) / wi], w);
+	}
+	while (1)
+	{
+		mlx_pixel_put(w->mlx_ptr, w->win_ptr, (x0 < 0 ? (1000) + x0 : x0 )%(1000) , (y0 < 0 ? (1000) + y0 : y0)%(1000), cl);
+
+		if (x0 == x1 && y0 == y1)
+			break;
+		e2 = err;
+		if (e2 > -dx)
+		{
+			err -= dy;
+			x0 += sx;
+		}
+		if (e2 < dy)
+		{
+			err += dx;
+			y0 += sy;
+		}
+	}
+}
+void drawmap(char *buff, int **table, t_win *w)
+{
+	int i = 0;
+	int j = 0;
+	w->mx = w->x * (1 - w->jj) - w->wi * w->zm / 2 + 500;
+	w->my = w->y * (1 - w->jj) - w->hi * w->zm / 2 + 500;
+	while (j < w->hi)
+	{
+		i = 0;
+		while (i < w->wi)
+		{
+
+			if (i != w->wi - 1)
+			{
+				line((i)*w->zm + w->mx, j * w->zm + w->my, (i + 1) * w->zm + w->mx, j * w->zm + w->my, w, table[j][i] == 0 && table[j][i + 1] == 0 ? 0xFFFFFF : 0xFF00FF, table, w->zm);
+			}
+			if (j != w->hi - 1)
+			{
+				line(i * w->zm + w->mx, j * w->zm + w->my, i * w->zm + w->mx, (j + 1) * w->zm + w->my, w, table[j][i] == 0 && table[j + 1][i] == 0 ? 0xFFFFFF : 0xFF00FF, table, w->zm);
+			}
+			i++;
+		}
+		j++;
+	}
+}
+
+int keypress(int key, t_win *w)
+{
+	if (key == 13)
+		w->jj = 1 - w->jj;
+	if (key == 6)
+		w->zm  = w->zm  + 1;
+	else if (key == 0 )
+		w->z = w->z + 1;
+	else if (key == 1)
+		w->z = w->z - 1;
+	else if (key == 34)
+		w->pr = w->pr * -1;
+	else if (key == 12)
+		w->rx = w->rx * -1;
+	else if (key == 7)
+		w->zm = w->zm - 1;
+	else if (key == 124)
+		w->x = w->x - 10;
+	else if (key == 125)
+		w->y = w->y - 10;
+	else if (key == 123)
+		w->x = w->x + 10;
+	else if (key == 126)
+		w->y = w->y + 10;
+	mlx_clear_window(w->mlx_ptr, w->win_ptr);
+	drawmap(w->buff, w->table, w);
+	return (0);
+}
+
+void print(char *buff)
+{
+	int **table;
+
+	t_win  w;
+	w.hi = count_height(buff);
+	w.wi = count_width(buff);
+	w.x = 0;
+	w.y = 0;
+	w.mlx_ptr = mlx_init();
+	w.zm = 1;
+	w.pr = 1;
+	w.z = 1;
+	w.table = store(buff);
+	w.buff = buff;
+	w.win_ptr = mlx_new_window(w.mlx_ptr, 1000, 1000, "hi Motherfucker");
 
 	table = store(buff);
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 1000, 1000, "fdf");
+	mlx_hook(w.win_ptr, 2, 0, keypress, &w);
 	
-	mlx_loop(mlx_ptr);
+	drawmap(buff, table, &w);
+	ft_putstr("finish\n");
+
+	mlx_loop(w.mlx_ptr);
 }
