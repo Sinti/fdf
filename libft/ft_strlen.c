@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <elibrahimi.soufiane@gmail>       +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/26 20:24:15 by selibrah          #+#    #+#             */
-/*   Updated: 2019/03/26 20:29:27 by selibrah         ###   ########.fr       */
+/*   Created: 2019/03/28 00:38:21 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/08 02:46:07 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(char *str)
+#include "libft.h"
+
+size_t	ft_strlen(const char *s)
 {
-	int i;
+	size_t	i;
 
 	i = 0;
-	while (str[i] != '\0')
+	while (s[i] != '\0')
 	{
-		i = i + 1;
+		i++;
 	}
 	return (i);
 }

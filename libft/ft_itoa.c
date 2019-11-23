@@ -3,60 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/18 22:21:14 by selibrah          #+#    #+#             */
-/*   Updated: 2019/04/21 05:03:19 by selibrah         ###   ########.fr       */
+/*   Created: 2019/04/01 21:45:46 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/08 01:52:58 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int		nbln(long nbr)
+static	int		ft_power(int n, int p)
 {
-	int o;
+	int		i;
+	int		x;
 
-	o = 0;
-	if (nbr < 0)
+	x = 1;
+	i = 0;
+	while (i < p)
 	{
-		nbr = -nbr;
-		o++;
+		x = x * n;
+		i++;
 	}
-	if (nbr == 0)
-		o++;
-	while (nbr > 0)
+	return (x);
+}
+
+static	size_t	ft_lenght(int nb)
+{
+	size_t	i;
+
+	i = 1;
+	while (nb / 10 != 0)
 	{
-		nbr = nbr / 10;
-		o++;
+		nb = nb / 10;
+		i++;
 	}
-	return (o);
+	return (i);
 }
 
 char			*ft_itoa(int n)
 {
-	int		l;
-	int		d;
-	long	nbr;
-	char	*nb;
+	int		i;
+	int		f;
+	int		len;
+	char	*res;
+	long	r;
 
-	nbr = n;
-	l = nbln(nbr);
-	nb = (char *)malloc((l + 1) * sizeof(char));
-	if (nb == NULL)
+	i = 0;
+	r = (long)n;
+	f = (r < 0) ? -1 : 1;
+	len = ft_lenght(r);
+	res = malloc(len + 2);
+	if (res == NULL)
 		return (NULL);
-	if (n < 0)
-		nbr = -nbr;
-	if (n == 0)
-		nb[0] = '0';
-	nb[l--] = '\0';
-	while (l >= 0)
+	if (f == -1)
+		res[i++] = '-';
+	r = r * f;
+	while (len-- > 0)
 	{
-		d = nbr / 10;
-		nb[l] = nbr - d * 10 + '0';
-		l--;
-		nbr = d;
+		res[i++] = r / ft_power(10, len) + '0';
+		r = r % ft_power(10, len);
 	}
-	if (n < 0)
-		nb[0] = '-';
-	return (nb);
+	res[i++] = '\0';
+	return (res);
 }

@@ -3,51 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 22:47:07 by selibrah          #+#    #+#             */
-/*   Updated: 2019/04/21 05:01:03 by selibrah         ###   ########.fr       */
+/*   Created: 2019/04/05 02:09:45 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/05 02:38:02 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int		nbrlen(long nbr, int fd)
+static	int		ft_power(int n, int p)
 {
-	long o;
+	int		i;
+	int		x;
 
-	o = 1;
-	if (nbr < 0)
+	x = 1;
+	i = 0;
+	while (i < p)
 	{
-		nbr = -nbr;
-		ft_putchar_fd('-', fd);
+		x = x * n;
+		i++;
 	}
-	if (nbr == 0)
-		ft_putchar_fd('0', fd);
-	while (nbr > 0)
+	return (x);
+}
+
+static	int		ft_lenght(int nb)
+{
+	int		i;
+
+	i = 1;
+	while (nb / 10 != 0)
 	{
-		nbr = nbr / 10;
-		o = o * 10;
+		nb = nb / 10;
+		i++;
 	}
-	o = o / 10;
-	return (o);
+	return (i);
 }
 
 void			ft_putnbr_fd(int n, int fd)
 {
-	long	l;
-	int		d;
-	long	nbr;
+	char	r;
+	int		x;
 
-	nbr = n;
-	l = nbrlen(nbr, fd);
-	if (n < 0)
-		nbr = -nbr;
-	while (l > 0)
+	if (n == -2147483648)
 	{
-		d = nbr / l;
-		ft_putchar_fd(d + '0', fd);
-		nbr = nbr - d * l;
-		l = l / 10;
+		ft_putchar_fd('-', fd);
+		ft_putchar_fd('2', fd);
+		n = 147483648;
+	}
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		n = n * -1;
+	}
+	x = ft_lenght(n) - 1;
+	while (x >= 0)
+	{
+		r = n / ft_power(10, x) + '0';
+		n = n % ft_power(10, x);
+		x--;
+		ft_putchar_fd(r, fd);
 	}
 }

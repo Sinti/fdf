@@ -37,6 +37,7 @@ typedef struct 		s_win
     int mx;
     int my;
     int hi;
+    int lx;
     int wi;
     char *liner;
     int		li;

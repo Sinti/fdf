@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strncmp.c                                          :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/05 05:01:41 by selibrah          #+#    #+#             */
-/*   Updated: 2019/04/21 04:01:19 by selibrah         ###   ########.fr       */
+/*   Created: 2019/03/29 14:13:18 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/08 02:48:58 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *s, const char *ss, size_t n)
 {
-	int				i;
-	unsigned int	ret;
+	size_t			i;
+	unsigned char	*s1;
+	unsigned char	*s2;
 
 	i = 0;
-	ret = 0;
-	if (n != 0)
-		ret = ret + (unsigned char)s1[i] - (unsigned char)s2[i];
-	while ((unsigned char)s2[i] != '\0' && ret == 0 && i < (int)n)
-	{
-		if ((unsigned char)s1[i] != '\0')
-		{
-			ret = ret + (unsigned char)s1[i] - (unsigned char)s2[i];
-			i++;
-		}
-		else
-			ret = ret + (unsigned char)s1[i] - (unsigned char)s2[i];
-	}
-	if ((unsigned char)s2[i] == '\0' && n != 0 && ret == 0)
-		ret = ret + (unsigned char)s1[i] - (unsigned char)s2[i];
-	return (ret);
+	s1 = (unsigned char *)s;
+	s2 = (unsigned char *)ss;
+	if (n == 0)
+		return (0);
+	while ((s1[i] && s2[i] && (s1[i] == s2[i])) && i + 1 < n)
+		i++;
+	return (s1[i] - s2[i]);
 }

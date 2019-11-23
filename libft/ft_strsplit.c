@@ -3,48 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/12 04:37:14 by selibrah          #+#    #+#             */
-/*   Updated: 2019/05/18 22:10:17 by selibrah         ###   ########.fr       */
+/*   Created: 2019/04/01 17:38:27 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/14 18:33:49 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	void	getnextword(char const *s, char c, char **tab)
+static	size_t	ft_countsplit(char const *s, char c)
 {
-	int i;
-	int j;
-	int k;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
-	k = 0;
+	j = 0;
+	while (s[i] == c)
+		i++;
+	if (s[i] == '\0')
+		return (0);
 	while (s[i])
 	{
-		while (s[i] == c)
-			i++;
-		j = i;
-		while (s[i] && s[i] != c)
-			i++;
-		if (i > j)
-		{
-			tab[k] = ft_strsub(s, j, i - j);
-			k++;
-		}
+		if ((s[i] == c && s[i + 1] != c) && s[i + 1])
+			j++;
+		i++;
 	}
-	tab[k] = NULL;
+	j++;
+	return (j);
+}
+
+static	size_t	ft_wlen(char const *s, char c)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s == c)
+		s++;
+	while ((s[i] != c) && (s[i]))
+	{
+		i++;
+	}
+	return (i);
 }
 
 char			**ft_strsplit(char const *s, char c)
 {
-	char **tab;
+	size_t	i;
+	size_t	k;
+	size_t	j;
+	char	**res;
 
-	if (s == NULL)
+	if (!s)
 		return (NULL);
-	tab = ft_senal(s, c);
-	if (tab == NULL)
+	i = 0;
+	k = 0;
+	j = ft_countsplit(s, c);
+	res = (char **)malloc((j + 1) * sizeof(char *));
+	if (res == NULL)
 		return (NULL);
-	getnextword(s, c, tab);
-	return (tab);
+	i = 0;
+	while (k < j)
+	{
+		while (s[i] == c)
+			s++;
+		res[k] = ft_strsub(s, 0, ft_wlen(s, c));
+		s = s + ft_wlen(s, c);
+		k++;
+	}
+	res[k] = NULL;
+	return (res);
 }

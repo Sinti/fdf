@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/12 00:55:29 by selibrah          #+#    #+#             */
-/*   Updated: 2019/04/21 04:18:30 by selibrah         ###   ########.fr       */
+/*   Created: 2019/04/01 02:17:33 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/15 16:13:55 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,29 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		i;
-	int		j;
-	int		x;
-	char	*c;
+	char	*res;
+	size_t	i;
+	size_t	j;
 
-	if (s1 == NULL || s2 == NULL)
+	i = 0;
+	j = 0;
+	if (!(s1 && s2))
 		return (NULL);
-	i = (size_t)ft_strlen((char *)s1);
-	j = (size_t)ft_strlen((char *)s2);
-	c = ft_strnew(i + j);
-	if (c == NULL)
+	while (s1[i])
+		i++;
+	while (s2[j])
+		j++;
+	if (!(res = (char *)malloc((i + j))))
 		return (NULL);
-	x = 0;
-	while (x < i + j)
+	i = 0;
+	j = 0;
+	while (s1[i])
 	{
-		if (x < i)
-			c[x] = s1[x];
-		else
-			c[x] = s2[x - i];
-		x++;
+		res[i] = s1[i];
+		i++;
 	}
-	c[i + j] = '\0';
-	return (c);
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	return (res);
 }

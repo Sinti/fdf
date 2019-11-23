@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: selibrah <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/05 02:55:09 by selibrah          #+#    #+#             */
-/*   Updated: 2019/05/18 18:00:59 by selibrah         ###   ########.fr       */
+/*   Created: 2019/03/29 13:43:16 by relkassm          #+#    #+#             */
+/*   Updated: 2019/04/08 02:31:36 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *src, const char *find, size_t len)
+char	*ft_strnstr(const char *s, const char *ss, size_t l)
 {
-	int i;
-	int j;
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*s1;
+	char	*s2;
 
 	i = 0;
-	j = 0;
-	if (find[0] == '\0')
-		return ((char *)src);
-	while (i < (int)len && src[i])
+	s1 = (char *)s;
+	s2 = (char *)ss;
+	len = ft_strlen(s2);
+	if (len == 0)
+		return (s1);
+	while (s1[i])
 	{
-		if (src[i] == find[j] && i < (int)len)
+		j = 0;
+		while (s2[j] == s1[i + j] && (i + j) < l)
 		{
-			while (src[i] == find[j] && find[j] && i < (int)len)
-			{
-				i++;
-				j++;
-			}
-			if (find[j] == '\0')
-				return ((char *)src + i - j);
-			i = i - j;
-			j = 0;
+			if (j == (len - 1))
+				return (s1 + i);
+			j++;
 		}
 		i++;
 	}
