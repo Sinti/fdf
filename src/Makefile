@@ -6,7 +6,7 @@
 #    By: relkassm <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/15 13:49:30 by relkassm          #+#    #+#              #
-#    Updated: 2019/11/15 13:49:33 by relkassm         ###   ########.fr        #
+#    Updated: 2019/11/25 15:02:18 by relkassm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,10 @@ NAME = ../fdf
 
 FLAG = -Werror -Wextra -Wall
 
-SRC = main.c check_file.c Drawline.c
+SRC = main.c check_file.c store.c fdf.c line.c
 
 
-OBJ = main.o check_file.o
+OBJ = main.o check_file.o store.o fdf.o line.o
 
 
 BIN = ../libft/libft.a ../minilibx_macos/libmlx.a
