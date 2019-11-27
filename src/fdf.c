@@ -111,7 +111,8 @@ void drawLandD(int i, int j, t_win *w, int **t)
 			iso(&w->x0, &w->y0, w->table[j][i], w);
 			iso(&w->x1, &w->y1, w->table[j + !w->LR][i + w->LR], w);
 		}
-		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? 0xFFFFFF : 0xFF0000);
+		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? \
+		0xFFFFFF : 0xFF0000);
 	}
 }
 

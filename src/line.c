@@ -33,8 +33,8 @@ void iso(int *x, int *y, int z, t_win *w)
 
 	previous_x = *x;
 	previous_y = *y;
-	*x = (previous_x - previous_y) * cos(90) + w->x * w->jj;
-	*y = -(z * w->z) + (previous_x + previous_y) * sin(90) + w->y * w->jj;
+	*x = (previous_x - previous_y) * cos(0.52) + w->x * w->jj;
+	*y = -(z * w->z) + (previous_x + previous_y) * sin(0.52) + w->y * w->jj;
 }
 
 void bresCalc(t_win *w)
@@ -46,9 +46,12 @@ void bresCalc(t_win *w)
 	w->err = (w->dx > w->dy ? w->dx : -w->dy) / 2;
 }
 
+
+
 void line(t_win *w, int cl)
 {
-	if (!((w->x0 > w->winx && w->x1 > w->winx) || (w->y0 > w->winy && w->y1 > w->winy) || (w->x1 < 0 && w->x0 < 0) || (w->y1 < 0 && w->y0 < 0)))
+	if (!((w->x0 > w->winx && w->x1 > w->winx) || (w->y0 > w->winy && \
+	w->y1 > w->winy) || (w->x1 < 0 && w->x0 < 0) || (w->y1 < 0 && w->y0 < 0)))
 	{
 		bresCalc(w);
 		while (1)
