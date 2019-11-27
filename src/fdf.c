@@ -37,6 +37,7 @@ void print(char *buff)
 	mlx_put_image_to_window(w.mlx_ptr, w.win_ptr, w.img_ptr, 0, 0);
 	mlx_loop(w.mlx_ptr);
 	free(w.img_data);
+	free_tablie(w.table, w.hi);
 }
 static void rotation(int *x, int *y, int *z, t_win *w)
 {
