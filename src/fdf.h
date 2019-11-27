@@ -23,9 +23,17 @@ typedef struct		s_win
 	void	*mlx_ptr;
 	void	*win_ptr;
 	void	*img_ptr;
+	int		dx;
+	int		sx;
+	int		dy;
+	int		sy;
+	int		err;
+	int		e2;
 	int		x;
-	int		x1;
 	int		y;
+	int		x0;
+	int		y0;
+	int		x1;
 	int		y1;
 	int		winx;
 	int		winy;
@@ -34,19 +42,17 @@ typedef struct		s_win
 	int		**table;
 	int		pr;
 	int		z;
-	int		z0;
-	int		z1;
 	int		rx;
 	int		mx;
 	int		my;
 	int		hi;
-	int		lx;
 	int		wi;
-	char	*liner;
-	int		li;
-	int		lo;
 	int		jj;
-	int		zmo;
+    int     bpp;
+	int     size_line;
+    int     endian;
+    char	*img_data;
+	int		LR;
 }					t_win;
 
 typedef struct		s_map
@@ -68,9 +74,8 @@ void				free_table(char **table);
 void				free_tablie(int **table, int y);
 void				drawmap(char *buff, int **table, t_win *w);
 void				print(char *buff);
-static void			iso(int *x, int *y, int z, t_win *w);
+void				iso(int *x, int *y, int z, t_win *w);
 static void			rotation(int *x, int *y, int *z, t_win *w);
 int					keypress(int key, t_win *w);
-void				line(int x0, int y0, int x1, int y1,\
-		t_win *w, int cl, int **table, int wi);
+void				line(t_win *w, int cl);
 #endif

@@ -12,57 +12,61 @@
 
 #include "fdf.h"
 
-static void		iso(int *x, int *y, int z, t_win *w)
+static void putimagein(int x, int y, int color, t_win *w)
 {
-	int		previous_x;
-	int		previous_y;
+	int i;
+
+	if (x < w->winx && y < w->winy && x > 0 && y > 0)
+	{
+		i = (x * w->bpp / 8) + (y * w->size_line);
+		w->img_data[i] = color;			// B — Blue
+		w->img_data[++i] = color >> 8;  // G — Green
+		w->img_data[++i] = color >> 16; // R — Red
+		w->img_data[++i] = 0;			// Alpha channel
+	}
+}
+
+void iso(int *x, int *y, int z, t_win *w)
+{
+	int previous_x;
+	int previous_y;
 
 	previous_x = *x;
 	previous_y = *y;
-	*x = (previous_x - previous_y) * cos(0.52) + w->x * w->jj;
-	*y = -(z * w->z) + (previous_x + previous_y) * sin(0.52) + w->y * w->jj;
+	*x = (previous_x - previous_y) * cos(90) + w->x * w->jj;
+	*y = -(z * w->z) + (previous_x + previous_y) * sin(90) + w->y * w->jj;
 }
 
-void			line(int x0, int y0, int x1, int y1, t_win *w, int cl, int **table, int wi)
+void bresCalc(t_win *w)
 {
-	int		dx;
-	int		sx;
-	int		dy;
-	int		sy;
-	int		err;
-	int		e2;
+	w->dx = abs(w->x1 - w->x0);
+	w->sx = w->x0 < w->x1 ? 1 : -1;
+	w->dy = abs(w->y1 - w->y0);
+	w->sy = w->y0 < w->y1 ? 1 : -1;
+	w->err = (w->dx > w->dy ? w->dx : -w->dy) / 2;
+}
 
-	if (w->pr < 0)
+void line(t_win *w, int cl)
+{
+	if (!((w->x0 > w->winx && w->x1 > w->winx) || (w->y0 > w->winy && w->y1 > w->winy) || (w->x1 < 0 && w->x0 < 0) || (w->y1 < 0 && w->y0 < 0)))
 	{
-		iso(&x0, &y0, table[(y0 - w->my) / wi][(x0 - w->mx) / wi], w);
-		iso(&x1, &y1, table[(y1 - w->my) / wi][(x1 - w->mx) / wi], w);
-	}
-	dx = abs(x1 - x0);
-	sx = x0 < x1 ? 1 : -1;
-	dy = abs(y1 - y0);
-	sy = y0 < y1 ? 1 : -1;
-	err = (dx > dy ? dx : -dy) / 2;
-	while (1)
-	{
-		mlx_pixel_put(w->mlx_ptr, w->win_ptr, (x0 > w->winx ? x0 % (w->wi * (w->zm > w->zmo ? w->zm : w->zmo) + 500)\
-		: (x0 < 0 ? w->wi * (w->zm > w->zmo ? w->zm : w->zmo) + 500 + x0 % (-w->wi *\
-		(w->zm > w->zmo ?\
-		 w->zm : w->zmo) - 500) : x0)),\
-		(y0 > w->winy ? y0 % (w->hi * (w->zm > w->zmo ? w->zm : w->zmo) + 500) :\
-		(y0 < 0 ? w->hi * (w->zm > w->zmo ? w->zm : w->zmo) + 500 + y0 % (-w->hi *\
-		(w->zm > w->zmo ? w->zm : w->zmo) - 500) : y0)), cl);
-		if (x0 == x1 && y0 == y1 )
-			break ;
-		e2 = err;
-		if (e2 > -dx)
+		bresCalc(w);
+		while (1)
 		{
-			err -= dy;
-			x0 += sx;
-		}
-		if (e2 < dy)
-		{
-			err += dx;
-			y0 += sy;
+			putimagein(w->x0, w->y0, cl, w);
+			if (w->x0 == w->x1 && w->y0 == w->y1)
+				break;
+			w->e2 = w->err;
+			if (w->e2 > -w->dx)
+			{
+				w->err -= w->dy;
+				w->x0 += w->sx;
+			}
+			if (w->e2 < w->dy)
+			{
+				w->err += w->dx;
+				w->y0 += w->sy;
+			}
 		}
 	}
 }
