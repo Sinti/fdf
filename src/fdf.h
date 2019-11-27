@@ -53,6 +53,8 @@ typedef struct		s_win
     int     endian;
     char	*img_data;
 	int		LR;
+	int		v;
+	int		m;
 }					t_win;
 
 typedef struct		s_map
@@ -77,5 +79,8 @@ void				print(char *buff);
 void				iso(int *x, int *y, int z, t_win *w);
 static void			rotation(int *x, int *y, int *z, t_win *w);
 int					keypress(int key, t_win *w);
+int					mouse_move(int x, int y, t_win *w);
+int					mouse_press(int b,int x, int y, t_win *w);
 void				line(t_win *w, int cl);
+void				drawMenu(t_win *w);
 #endif

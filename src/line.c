@@ -20,9 +20,9 @@ static void putimagein(int x, int y, int color, t_win *w)
 	{
 		i = (x * w->bpp / 8) + (y * w->size_line);
 		w->img_data[i] = color;			// B — Blue
-		w->img_data[++i] = color >> 8;  // G — Green
-		w->img_data[++i] = color >> 16; // R — Red
-		w->img_data[++i] = 0;			// Alpha channel
+		w->img_data[++i] = (color >> 8);  // G — Green
+		w->img_data[++i] = (color >> 16) + w->v ; // R — Red
+		w->img_data[++i] = 0;
 	}
 }
 

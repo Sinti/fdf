@@ -21,24 +21,90 @@ void print(char *buff)
 	w.x = 0;
 	w.y = 0;
 	w.jj = 0;
-	w.winx = 1600;
+	w.winx = 966;
 	w.winy = 800;
-	w.zm = 1;
+	w.zm = 10;
 	w.pr = 1;
+	w.m = 0;
 	w.z = 1;
 	w.table = store(buff);
 	w.mlx_ptr = mlx_init();
 	w.buff = buff;
-	w.win_ptr = mlx_new_window(w.mlx_ptr, w.winx, w.winy, "FDF");
+	w.win_ptr = mlx_new_window(w.mlx_ptr, w.winx + 322, w.winy, "FDF");
 	w.img_ptr = mlx_new_image(w.mlx_ptr, w.winx, w.winy);
 	w.img_data = mlx_get_data_addr(w.img_ptr, &w.bpp, &w.size_line, &w.endian);
 	mlx_hook(w.win_ptr, 2, 0, keypress, &w);
+		mlx_hook(w.win_ptr, 4, 0, mouse_press, &w);
+		mlx_hook(w.win_ptr, 6, 0, mouse_move, &w);
 	drawmap(buff, w.table, &w);
 	mlx_put_image_to_window(w.mlx_ptr, w.win_ptr, w.img_ptr, 0, 0);
+	drawMenu(&w);
 	mlx_loop(w.mlx_ptr);
 	free(w.img_data);
-	free_tablie(w.table, w.hi);
+	//free_tablie(w.table, w.hi);
 }
+
+void drawrect(t_win *w,int fi,int fj,int cl)
+{
+	int i;
+	int j;
+	i = 0;
+	j = 0;
+	while (j < fj)
+	{
+		i = 0;
+		while (i < fi)
+		{
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, i, j, cl);
+			i++;
+		}
+		j++;
+	}
+}
+
+int mouse_press(int b,int x, int y, t_win *w)
+{
+	if (b == 4)
+		w->zm++;
+	if (b == 5)
+		w->zm--;
+	ft_bzero(w->img_data, w->winx * w->winy * 4);
+	drawmap(w->buff, w->table, w);
+	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
+	return 0;
+}
+
+int mouse_move(int x, int y, t_win *w)
+{
+	w->x = x - 322 - w->wi*w->zm / 2;
+	w->y = y - w->hi * w->zm/2;
+	ft_bzero(w->img_data, w->winx * w->winy * 4);
+	drawmap(w->buff, w->table, w);
+	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
+	return 0;
+}
+
+void drawMenu(t_win *w)
+{
+	drawrect(w,322,800,0x4d80e4);
+	drawrect(w,322,700,0x5e8ce6);
+	drawrect(w,322,600,0x7099e9);
+	drawrect(w,322,500,0x82a6ec);
+	drawrect(w,322,400,0x94b2ee);
+	drawrect(w,322,300,0xa6bff1);
+	drawrect(w,322,200,0xb7ccf4);
+	drawrect(w,322,100,0x4573CD);
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 322/2 - 	40, 40, 0xFFFFFF, "Fdf Menu");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 140, 0x4d80e4, "Arrow : Move The Map.");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 240, 0x5e8ce6, "Z / X : Zoom In / Out.");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 440, 0x4573CD, "A / S : In / Decrease Z Value.");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 620, 0xa6bff1, "I     : Switch Between");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 640, 0xa6bff1, "        Projections.");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 720, 0xb7ccf4, "W     : Switch Between");
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 740, 0xb7ccf4, "        Projections.");
+
+}
+
 static void rotation(int *x, int *y, int *z, t_win *w)
 {
 	int previous_x;
@@ -94,7 +160,7 @@ int keypress(int key, t_win *w)
 	{
 		ft_bzero(w->img_data, w->winx * w->winy * 4);
 		drawmap(w->buff, w->table, w);
-		mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 0, 0);
+		mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
 	}
 	return (0);
 }
@@ -112,8 +178,8 @@ void drawLandD(int i, int j, t_win *w, int **t)
 			iso(&w->x0, &w->y0, w->table[j][i], w);
 			iso(&w->x1, &w->y1, w->table[j + !w->LR][i + w->LR], w);
 		}
-		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? \
-		0xFFFFFF : 0xFF0000);
+		w->v = t[j][i] + t[j + !w->LR][i + w->LR];
+		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? 0xdff6f0: 0 + w->z);
 	}
 }
 
