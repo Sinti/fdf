@@ -6,7 +6,7 @@
 /*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 11:38:35 by relkassm          #+#    #+#             */
-/*   Updated: 2019/11/25 15:46:08 by relkassm         ###   ########.fr       */
+/*   Updated: 2019/11/28 16:19:58 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,16 @@ typedef struct		s_win
 	int		hi;
 	int		wi;
 	int		jj;
-    int     bpp;
-	int     size_line;
-    int     endian;
+	int		bpp;
+	int		size_line;
+	int		endian;
 	char	*img_data;
-	int		LR;
+	int		lr;
 	int		v;
-	int	 	m;
-	int xk;
-	int yk;
+	int		m;
+	int		cl;
+	int		xk;
+	int		yk;
 }					t_win;
 
 typedef struct		s_map
@@ -69,20 +70,29 @@ typedef struct		s_map
 	char	**line;
 }					t_map;
 
-int					char_check(char x);
-int					check(char *buff);
 int					count_height(char *buff);
 int					count_width(char *fstline);
+int					char_check(char x);
+int					check(char *buff);
+
 int					**store(char *buff);
 void				free_table(char **table);
 void				free_tablie(int **table, int y);
-void				drawmap(char *buff, int **table, t_win *w);
-void				print(char *buff);
+
+static void			putimagein(int x, int y, int color, t_win *w);
 void				iso(int *x, int *y, int z, t_win *w);
-static void			rotation(int *x, int *y, int *z, t_win *w);
-int					keypress(int key, t_win *w);
-int					mouse_move(int x, int y, t_win *w);
-int					mouse_press(int b,int x, int y, t_win *w);
+void				brescalc(t_win *w);
 void				line(t_win *w, int cl);
-void				drawMenu(t_win *w);
+
+void				init(t_win *w, char *buff);
+void				mlx_start(char *buff);
+void				drawlandd(int i, int j, t_win *w, int **t);
+void				drawmap(char *buff, int **t, t_win *w);
+void				drawrect(t_win *w, int fi, int fj, int cl);
+
+int					mouse_press(int b, int x, int y, t_win *w);
+int					mouse_move(int x, int y, t_win *w);
+void				keypart(int key, t_win *w, int *a);
+int					keypress(int key, t_win *w);
+void				drawmenu(t_win *w);
 #endif

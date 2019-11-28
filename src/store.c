@@ -6,7 +6,7 @@
 /*   By: relkassm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 13:06:15 by relkassm          #+#    #+#             */
-/*   Updated: 2019/11/25 15:34:38 by relkassm         ###   ########.fr       */
+/*   Updated: 2019/11/28 16:11:16 by relkassm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,5 @@ void	free_tablie(int **table, int y)
 		free(table[i]);
 		i++;
 	}
-	free(table[i]);
 	free(table);
 }

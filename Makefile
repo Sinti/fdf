@@ -6,13 +6,13 @@
 #    By: relkassm <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/15 13:49:07 by relkassm          #+#    #+#              #
-#    Updated: 2019/11/15 13:49:15 by relkassm         ###   ########.fr        #
+#    Updated: 2019/11/28 15:33:53 by relkassm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
-SRCOBJ = src/main.o	src/check_file.o src/store.o src/fdf.o src/line.o
+SRCOBJ = src/main.o	src/check_file.o src/store.o src/fdf.o src/line.o src/events.o
 
 LIBOBJ = 	libft/ft_atoi.o       libft/ft_lstnew.o     libft/ft_putendl_fd.o libft/ft_strequ.o     libft/ft_strnew.o	\
 			libft/ft_bzero.o      libft/ft_memalloc.o   libft/ft_putnbr.o     libft/ft_striter.o    libft/ft_strnstr.o	\
