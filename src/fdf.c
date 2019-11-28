@@ -21,9 +21,9 @@ void print(char *buff)
 	w.x = 0;
 	w.y = 0;
 	w.jj = 0;
-	w.winx = 966;
+	w.winx = 1600;
 	w.winy = 800;
-	w.zm = 10;
+	w.zm = 1;
 	w.pr = 1;
 	w.m = 0;
 	w.z = 1;
@@ -34,17 +34,17 @@ void print(char *buff)
 	w.img_ptr = mlx_new_image(w.mlx_ptr, w.winx, w.winy);
 	w.img_data = mlx_get_data_addr(w.img_ptr, &w.bpp, &w.size_line, &w.endian);
 	mlx_hook(w.win_ptr, 2, 0, keypress, &w);
-		mlx_hook(w.win_ptr, 4, 0, mouse_press, &w);
-		mlx_hook(w.win_ptr, 6, 0, mouse_move, &w);
+	mlx_hook(w.win_ptr, 4, 0, mouse_press, &w);
+	mlx_hook(w.win_ptr, 6, 0, mouse_move, &w);
 	drawmap(buff, w.table, &w);
-	mlx_put_image_to_window(w.mlx_ptr, w.win_ptr, w.img_ptr, 0, 0);
+	mlx_put_image_to_window(w.mlx_ptr, w.win_ptr, w.img_ptr, 322, 0);
 	drawMenu(&w);
 	mlx_loop(w.mlx_ptr);
 	free(w.img_data);
-	//free_tablie(w.table, w.hi);
+	free_tablie(w.table, w.hi);
 }
 
-void drawrect(t_win *w,int fi,int fj,int cl)
+void drawrect(t_win *w, int fi, int fj, int cl)
 {
 	int i;
 	int j;
@@ -62,12 +62,16 @@ void drawrect(t_win *w,int fi,int fj,int cl)
 	}
 }
 
-int mouse_press(int b,int x, int y, t_win *w)
+int mouse_press(int b, int x, int y, t_win *w)
 {
 	if (b == 4)
-		w->zm++;
-	if (b == 5)
-		w->zm--;
+			w->zm = w->zm + 4;
+	if (b == 5 && w->zm > 1)
+			w->zm = w->zm - 4;
+	if (b == 1)
+		w->m = !w->m;
+	w->xk = x - 322 - w->x;
+	w->yk = y - w->y;
 	ft_bzero(w->img_data, w->winx * w->winy * 4);
 	drawmap(w->buff, w->table, w);
 	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
@@ -76,25 +80,28 @@ int mouse_press(int b,int x, int y, t_win *w)
 
 int mouse_move(int x, int y, t_win *w)
 {
-	w->x = x - 322 - w->wi*w->zm / 2;
-	w->y = y - w->hi * w->zm/2;
-	ft_bzero(w->img_data, w->winx * w->winy * 4);
-	drawmap(w->buff, w->table, w);
-	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
+	if (w->m == 1)
+	{
+		w->x = x - 322 - w->xk;
+		w->y = y - w->yk;
+		ft_bzero(w->img_data, w->winx * w->winy * 4);
+		drawmap(w->buff, w->table, w);
+		mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img_ptr, 322, 0);
+	}
 	return 0;
 }
 
 void drawMenu(t_win *w)
 {
-	drawrect(w,322,800,0x4d80e4);
-	drawrect(w,322,700,0x5e8ce6);
-	drawrect(w,322,600,0x7099e9);
-	drawrect(w,322,500,0x82a6ec);
-	drawrect(w,322,400,0x94b2ee);
-	drawrect(w,322,300,0xa6bff1);
-	drawrect(w,322,200,0xb7ccf4);
-	drawrect(w,322,100,0x4573CD);
-	mlx_string_put(w->mlx_ptr, w->win_ptr, 322/2 - 	40, 40, 0xFFFFFF, "Fdf Menu");
+	drawrect(w, 322, 800, 0x4d80e4);
+	drawrect(w, 322, 700, 0x5e8ce6);
+	drawrect(w, 322, 600, 0x7099e9);
+	drawrect(w, 322, 500, 0x82a6ec);
+	drawrect(w, 322, 400, 0x94b2ee);
+	drawrect(w, 322, 300, 0xa6bff1);
+	drawrect(w, 322, 200, 0xb7ccf4);
+	drawrect(w, 322, 100, 0x4573CD);
+	mlx_string_put(w->mlx_ptr, w->win_ptr, 322 / 2 - 40, 40, 0xFFFFFF, "Fdf Menu");
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 140, 0x4d80e4, "Arrow : Move The Map.");
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 240, 0x5e8ce6, "Z / X : Zoom In / Out.");
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 440, 0x4573CD, "A / S : In / Decrease Z Value.");
@@ -102,7 +109,6 @@ void drawMenu(t_win *w)
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 640, 0xa6bff1, "        Projections.");
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 720, 0xb7ccf4, "W     : Switch Between");
 	mlx_string_put(w->mlx_ptr, w->win_ptr, 20, 740, 0xb7ccf4, "        Projections.");
-
 }
 
 static void rotation(int *x, int *y, int *z, t_win *w)
@@ -124,7 +130,7 @@ void keypart(int key, t_win *w, int *a)
 	if (key == 34)
 		w->pr = w->pr * -1;
 	else if (key == 12)
-		w->rx = w->rx * -1;
+		w->m = !w->m;
 	else if (key == 7 && w->zm > 1)
 		w->zm = w->zm - 1;
 	else if (key == 124)
@@ -179,7 +185,7 @@ void drawLandD(int i, int j, t_win *w, int **t)
 			iso(&w->x1, &w->y1, w->table[j + !w->LR][i + w->LR], w);
 		}
 		w->v = t[j][i] + t[j + !w->LR][i + w->LR];
-		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? 0xdff6f0: 0 + w->z);
+		line(w, t[j][i] == 0 && t[j + !w->LR][i + w->LR] == 0 ? 0xdff6f0 : 0 + w->z);
 	}
 }
 
@@ -190,8 +196,8 @@ void drawmap(char *buff, int **t, t_win *w)
 
 	i = 0;
 	j = 0;
-	w->mx = w->x * (1 - w->jj);
-	w->my = w->y * (1 - w->jj);
+	w->mx = w->x  - w->wi * w->zm / 2 + 800;
+	w->my = w->y  - w->hi * w->zm / 2 + 400;
 	while (j < w->hi)
 	{
 		i = 0;

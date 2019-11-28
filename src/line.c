@@ -19,8 +19,8 @@ static void putimagein(int x, int y, int color, t_win *w)
 	if (x < w->winx && y < w->winy && x > 0 && y > 0)
 	{
 		i = (x * w->bpp / 8) + (y * w->size_line);
-		w->img_data[i] = color;			// B — Blue
-		w->img_data[++i] = (color >> 8);  // G — Green
+		w->img_data[i] = color + w->v;			// B — Blue
+		w->img_data[++i] = (color >> 8) + w->v;  // G — Green
 		w->img_data[++i] = (color >> 16) + w->v ; // R — Red
 		w->img_data[++i] = 0;
 	}
@@ -31,8 +31,8 @@ void iso(int *x, int *y, int z, t_win *w)
 	int previous_x;
 	int previous_y;
 
-	previous_x = *x;
-	previous_y = *y;
+	previous_x = *x - w->x * w->jj;
+	previous_y = *y - w->y * w->jj;
 	*x = (previous_x - previous_y) * cos(0.52) + w->x * w->jj;
 	*y = -(z * w->z) + (previous_x + previous_y) * sin(0.52) + w->y * w->jj;
 }

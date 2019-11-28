@@ -51,10 +51,12 @@ typedef struct		s_win
     int     bpp;
 	int     size_line;
     int     endian;
-    char	*img_data;
+	char	*img_data;
 	int		LR;
 	int		v;
-	int		m;
+	int	 	m;
+	int xk;
+	int yk;
 }					t_win;
 
 typedef struct		s_map
